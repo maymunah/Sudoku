@@ -11,6 +11,6 @@ script:
   - javac -cp .:../lib/junit-4.12.jar GeneratorTest.java
 
   # run tests
-  - java -cp .:../lib/junit-4.12.jar:lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
+  - java -cp .:../lib/junit-4.12.jar:../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
   # windows
   # java -cp SRC;lib/junit-4.12.jar;lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
