@@ -1,9 +1,16 @@
 import java.io.BufferedReader;
 import java.io.EOFException;
+
 import java.io.File;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,62 +22,60 @@ import java.util.StringTokenizer;
 
 
 public class Generator {
-	
+
 	private int n;
 	private int p;
 	private int q;
 	private int m;
-	
+
 	private int[][] grid;
-	
+
 	private ArrayList<ArrayList<ArrayList<Integer>>> domains = new ArrayList<ArrayList<ArrayList<Integer>>>();
-	
+
 	public Generator(){
 		n = 9;
 		p = 3;
 		q = 3;
 		m = 0;
 		grid = new int[9][9];
-		
+
 		// domain = [1,2,3,4,5,6,7,8,9]
 		ArrayList<Integer> d = new ArrayList<>();
 		for (int i = 1; i < 10; i++){
 			d.add(i);
 		}
-		
+
 		// initialize cell domains with {1,2,3,4,5,6,7,8,9}
 		for (int i = 0; i < 9; i++){
 			domains.add(i, new ArrayList<ArrayList<Integer>>());
 			for (int j =0; j < 9; j++){
 				domains.get(i).add(j, new ArrayList<Integer>());
 				domains.get(i).get(j).addAll(d);
-				
+
 			}
 		}
 	}
-	
-	public void generate(File input, File output) throws IOException{
-	
-		FileReader readInput = new FileReader(input);
-		BufferedReader reader = new BufferedReader(readInput);
+
+	public void generate(InputStream input, OutputStream output) throws IOException{
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		String inputLine = reader.readLine();
 		StringTokenizer st = new StringTokenizer(inputLine," ");
 		n = Integer.parseInt(st.nextToken());
 		p = Integer.parseInt(st.nextToken());
 		q = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		
-		
+
+
 		if (canProceed()){    // after input error checking
 
 			fillMcells();
 
 		}
 
-
-
 		// writing content to output file:
-		FileWriter writeOutput = new FileWriter(output);
+		// FileWriter writeOutput = new FileWriter(output);
+		OutputStreamWriter writeOutput = new OutputStreamWriter(output);
 		writeOutput.write(""+n+" "+p+" "+q+"\n");
 
 		for (int i = 0; i < 9; i++){
@@ -98,7 +103,7 @@ public class Generator {
 		else if ( p != 3 ){
 			System.out.println("There's a problem: p != 3");
 			return false;
-		} 
+		}
 
 		else if ( q != 3 ){
 			System.out.println("There's a problem: q != 3");
@@ -256,7 +261,7 @@ public class Generator {
 		}
 		return false;
 	}
-	
+
 	// fill the grid with m tokens
 	private void fillMcells(){
 		int i = 0;
@@ -264,12 +269,12 @@ public class Generator {
 		int randomCell;// = gen.nextInt(82);
 		int randomToken;
 		int radomDomainIndex;
-		
+
 		while ( i < m){
-			
+
 
 			randomCell = gen.nextInt(81);
-			
+
 
 			int iRandCell = ((randomCell / 9));//-1)>=0?randomCell / 9-1:randomCell / 9 ;
 			int jRandCell = ((randomCell % 9));//-1)>=0?randomCell % 9-1:randomCell % 9 ;
@@ -300,7 +305,7 @@ public class Generator {
 			}
 		}
 	}
-	
+
 	private void resetGrid(){
 		grid = new int[9][9];
 	}

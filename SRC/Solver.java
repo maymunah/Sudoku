@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -10,7 +12,7 @@ import java.util.StringTokenizer;
 public class Solver{
 
 	public static long end;
-	
+
 	private long[] finalOutput;
 	private int n;
 	private int p;
@@ -23,10 +25,10 @@ public class Solver{
 	private ArrayList<Integer> cellDomain;
 	private ArrayList<ArrayList<ArrayList<Integer>>> domains;
 	private int nextAvailCell[];
-	
+
 
 	private  long totalsolverstart;
-	
+
 	public Solver(long t){
 		totalsolverstart = t;
 		n = 9;
@@ -42,7 +44,7 @@ public class Solver{
 		cellDomain = new ArrayList<Integer>();
 		for (int i = 1; i < 10; i++){
 			cellDomain.add(i);                                      // cellDomain = [1,2,3,4,5,6,7,8,9]
-		} 
+		}
 
 		domains = new ArrayList<ArrayList<ArrayList<Integer>>>();   // stores cellDomains for all cells
 		for (int i = 0; i < 9; i++){
@@ -67,9 +69,8 @@ public class Solver{
 	}
 
 
-	public void readInputFile(File input) throws IOException{
-		FileReader readInput = new FileReader(input);
-		BufferedReader reader = new BufferedReader(readInput);
+	public void readInput(InputStream input) throws IOException{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		String inputLine = reader.readLine();
 		StringTokenizer st = new StringTokenizer(inputLine," ");
 		n = Integer.parseInt(st.nextToken());
@@ -100,7 +101,7 @@ public class Solver{
 		else if ( p != 3 ){
 			System.out.println("There's a problem: p != 3");
 			return false;
-		} 
+		}
 
 		else if ( q != 3 ){
 			System.out.println("There's a problem: q != 3");
@@ -111,7 +112,7 @@ public class Solver{
 	}
 
 	// find the block given cell coordinates
-	// 0 1 2 
+	// 0 1 2
 	// 3 4 5
 	// 6 7 8
 	private int findBlock(int i, int j){
@@ -293,7 +294,7 @@ public class Solver{
 		return nextCell;
 	}
 
-	
+
 
 	private void printOutput(long[] a){
 		System.out.println("Time: " + a[0]);
@@ -302,11 +303,11 @@ public class Solver{
 		System.out.println("Timeout: " + (a[3]==0? "No" : "Yes"));
 		System.out.println("Search Time: " + a[0]);
 	}
-	
+
 	public void solveBT(int i, int j){
-		
+
 		if ( System.nanoTime() >= (Sudoku.timeLimit + totalsolverstart)){
-			
+
 			//time out
 			end = System.nanoTime();
 			//prepare output
@@ -327,7 +328,7 @@ public class Solver{
 				finalOutput[0] = (long) ((end - totalsolverstart)/(1000000.0)); // in milliseconds
 				finalOutput[1] =  getNumberOfAssignments();
 				finalOutput[2] = 1; // solution
-				finalOutput[3] = 0; // no timeout 
+				finalOutput[3] = 0; // no timeout
 				finalOutput[4] = (long) ((end - Sudoku.totalSearchStart)/(1000000.0));
 				//print output
 				printOutput(finalOutput);
@@ -349,7 +350,7 @@ public class Solver{
 					// ..
 					if (nextAvailCell[0] == 0 && nextAvailCell[1] == 0){
 						end = System.nanoTime();
-						
+
 						//prepare output
 						finalOutput[0] = (long) ((end - totalsolverstart)/(1000000.0)); // in milliseconds
 						finalOutput[1] =  getNumberOfAssignments();
@@ -372,8 +373,8 @@ public class Solver{
 			}
 
 		}
-		// backtracked all the way to 0 
-		if (i ==0 && j ==0 && startDomainIndex[0][0] == 8){  
+		// backtracked all the way to 0
+		if (i ==0 && j ==0 && startDomainIndex[0][0] == 8){
 			end = System.nanoTime();
 			//prepare output
 			finalOutput[0] = (long) ((end - totalsolverstart)/(1000000.0)); // in milliseconds
@@ -388,7 +389,7 @@ public class Solver{
 	}
 
 	public void solveBTandFC(int i, int j){
-	
+
 		if ( System.nanoTime() >= (Sudoku.timeLimit + totalsolverstart)){
 			//time out
 			end = System.nanoTime();
@@ -405,7 +406,7 @@ public class Solver{
 		if (fixedCell[i][j]){
 			nextAvailCell = findNextCell(i, j);
 			if (nextAvailCell[0] == 0 && nextAvailCell[1] == 0){
-				
+
 				end = System.nanoTime();
 				//prepare output
 				finalOutput[0] = (long) ((end - totalsolverstart)/(1000000.0)); // in milliseconds
@@ -424,15 +425,15 @@ public class Solver{
 		else{
 
 			for (int ind = startDomainIndex[i][j]; ind < 9; ind++){
-				
+
 				int val = domains.get(i).get(j).get(ind);
-				
+
 				if (val!=0){
 					assignments++;
 				}
-				
+
 				if ( val != 0 && checkRow(i, val) && checkCol(j, val) && checkBlock(findBlock(i, j), val)){
-					
+
 					startDomainIndex[i][j] = val - 1;
 					grid[i][j] = val;
 					nextAvailCell = findNextCell(i, j);
@@ -440,7 +441,7 @@ public class Solver{
 					removeFromRow(i, j, val);
 					removeFromCol(i, j, val);
 					removeFromBlock(i, j, val);
-					
+
 					if (nextAvailCell[0] == 0 && nextAvailCell[1] == 0){
 						end = System.nanoTime();
 						//prepare output
@@ -455,7 +456,7 @@ public class Solver{
 					}
 					else{
 						solveBTandFC(nextAvailCell[0], nextAvailCell[1]);
-						
+
 					}
 					// ..
 					//
@@ -468,8 +469,8 @@ public class Solver{
 			}
 
 		}
-		// backtracked all the way to 0 
-		if (i ==0 && j ==0 && startDomainIndex[0][0] == 8){       
+		// backtracked all the way to 0
+		if (i ==0 && j ==0 && startDomainIndex[0][0] == 8){
 			end = System.nanoTime();
 			//prepare output
 			finalOutput[0] = (long) ((end - totalsolverstart)/(1000000.0)); // in milliseconds
@@ -483,21 +484,21 @@ public class Solver{
 		}
 	}
 
-	
 
-	
+
+
 
 
 	private void removeFromRow(int row, int col, int value){
-		
+
 		for (int j = 0; j < 9; j++ ){
-			
+
 			if (col !=j)
-				domains.get(row).get(j).set(value-1, 0);	
+				domains.get(row).get(j).set(value-1, 0);
 
 		}
 		/*for (int j = 0; j < col; j++ ){
-			domains.get(row).get(j).set(value-1, 0);	
+			domains.get(row).get(j).set(value-1, 0);
 
 		}
 		for (int j = col+1; j < 9; j++ ){
@@ -511,7 +512,7 @@ public class Solver{
 		for (int i = 0; i < 9; i++ ){
 
 			if (row !=i)
-				domains.get(i).get(col).set(value-1, 0);	
+				domains.get(i).get(col).set(value-1, 0);
 
 		}
 		/*for (int i = 0; i < row; i++ ){
@@ -621,12 +622,12 @@ public class Solver{
 			}
 
 		}
-		
+
 	}
 
 	private void restoreRow(int row, int col, int value){
 		for (int j = 0; j < col; j++ ){
-			domains.get(row).get(j).set(value-1, value);	
+			domains.get(row).get(j).set(value-1, value);
 
 		}
 		for (int j = col+1; j < 9; j++ ){
