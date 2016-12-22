@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/quakehead/Sudoku.svg?branch=master)](https://travis-ci.org/quakehead/Sudoku)
+[![Build Status](https://travis-ci.org/maymunah/Sudoku.svg?branch=master)](https://travis-ci.org/maymunah/Sudoku)
 
 ## The steps needed to compile your Generator and Solver:
 1. In Eclipse:
