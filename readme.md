@@ -45,3 +45,10 @@ given specifications)
 2. Solver:
 attempts solving a given standard Sudoku. It gets data from an input file.
 It uses: Backtracking and Bactracking+ForwardChecking 
+
+
+## Run tests:
+
+- using junit:
+
+	`... Sudoku\SRC> java -cp .;../lib/junit-4.12.jar;../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest`
