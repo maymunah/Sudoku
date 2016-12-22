@@ -4,10 +4,12 @@ jdk:
   - oraclejdk8
 
 install:
-    - cd SRC/; javac Sudoku.java
-    - cd SRC/; javac -cp ../lib/junit-4.12.jar GeneratorTest.java
+  - cd SRC/
+  - javac Sudoku.java
+  - javac -cp .:../lib/junit-4.12.jar GeneratorTest.java
 
 test:
-  - cd SRC/; java -cp .:lib/junit-4.12.jar:lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
+  - cd SRC/
+  - java -cp .:../lib/junit-4.12.jar:lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
   # windows
   # java -cp SRC;lib/junit-4.12.jar;lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
