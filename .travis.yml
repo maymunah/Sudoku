@@ -1,0 +1,13 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+install:
+    - javac SRC/Sudoku.java
+    - javac -cp SRC/:lib/junit-4.12.jar GeneratorTest.java
+
+test:
+  - java -cp SRC:lib/junit-4.12.jar:lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
+  # windows
+  # java -cp SRC;lib/junit-4.12.jar;lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore GeneratorTest
