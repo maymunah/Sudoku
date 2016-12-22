@@ -4,7 +4,7 @@ jdk:
   - oraclejdk8
 
 install:
-    - javac SRC/Sudoku.java
+    - javac -cp SRC/ SRC/Sudoku.java
     - javac -cp SRC/:lib/junit-4.12.jar GeneratorTest.java
 
 test:
